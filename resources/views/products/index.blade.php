@@ -56,11 +56,33 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">
         Create Product
     </button>
-<script>
-    document.querySelector('.btn-primary').addEventListener('click', function() {
-        window.location.href = "{{ route('products.create') }}";
-    });
 
+    <!-- Modal -->
+    <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProductModalLabel">Create Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('products.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="productName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="productName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label">Product Price</label>
+                            <input type="number" class="form-control" id="productPrice" name="price" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
     setTimeout(function() {
         const successMessage = document.getElementById('success-message');
         if (successMessage) {

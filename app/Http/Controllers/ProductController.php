@@ -26,11 +26,6 @@ class ProductController extends Controller
         return view($view, compact('products'));
     }
 
-    public function create(#[CurrentUser] User $user)
-    {
-        return view('products.create');
-    }
-
     public function store(StoreProductRequest $request, #[CurrentUser] User $user)
     {
         $product = Product::create($request->validated());
