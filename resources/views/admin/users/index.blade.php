@@ -18,8 +18,10 @@
                 <th>Price</th>
                 <th>Product Count</th>
                 <th>Owner</th>
+                <th>Is Admin</th>
                 <th>Created At</th>
                 <th>Updated At</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -34,10 +36,54 @@
                             {{ $user->products->first()->user->name }}
                         @endif
                     </td>
-                    <td>{{ $user->created_at }}</td>
-                    <td>{{ $user->updated_at }}</td>
+                    <td>{{ $user->is_admin ? 'Yes' : 'No' }}</td>
+                    <td>{{ $user->created_at->format('M d, Y H:i, A') }}</td>
+                    <td>{{ $user->updated_at->format('M d, Y H:i, A') }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#productsModal{{ $user->id }}">
+                            <i class="fas fa-box-open"></i> Products
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="productsModal{{ $user->id }}" tabindex="-1" aria-labelledby="productsModalLabel{{ $user->id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="productsModalLabel{{ $user->id }}">Products of {{ $user->name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="max-height: 600px; overflow-y: auto;">
+                                        @if($user->products->isNotEmpty())
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($user->products as $product)
+                                                        <tr>
+                                                            <td>{{ $product->name }}</td>
+                                                            <td>${{ $product->price }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        @else
+                                            <p>No products found for this user.</p>
+                                        @endif
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
+    </table>
 </div>
 @endsection
